@@ -1,6 +1,6 @@
-// Use item names defined at /etc/openhab2/items/home.items
+// Use item names defined at /etc/openhab2/items/elevator.items
  
-sitemap home label="Laygond-AI"
+sitemap elevator label="Laygond-AI"
 {
     Frame label="Energia"
     {
