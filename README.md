@@ -1,16 +1,13 @@
-# My-Smart-House
-House Automation through OpenHab2
+# Elevator-AI
+Intelligent Elevator using OpenHAB, OpenCV, and TensorFlow for creating Automation Rules
 
 # Directory Structure
 ```
-.My-Smart-House
+.Elevator-AI
 ├── README.md
-├── firmware                 # IoT Device firmware
-│   ├── LinkNode_R4-RelayBoard
-│   ├── MK-DoorSensor
-│   ├── MK-FireSensor
-│   ├── MK-LEDStripController
-│   └── wyze_v2
+├── firmware                 # Custom ESP8266/32 IoT firmware
+│   ├── custom-motion-sensor # detects motion inside elevator
+│   └── custom-servo-switch  # turns elevator ON/OFF
 ├── openhab2                 # soft link to openhab's directory
 │   ├── items
 │   ├── rules
@@ -20,17 +17,17 @@ House Automation through OpenHab2
 ├── no_signal.png
 └── simple_cam_monitor.py
 ```
+# Web/Mobile App Sitemap
+
+# Implemented Rules/Features
+- Turn elevator ON/OFF manually 
+- Schedule to turn elevator ON at 8AM
+- Schedule to turn elevator OFF repetively every 10 min for about an hour starting at 8PM until there is no motion inside elevator (there are no people)
+- More later ...
+
 # References
-
 ### Hardware
-[MK-DoorSensor](https://www.MK-SmartHouse.com/door-sensor)
-[LinkNode R4 relay board](https://www.linksprite.com/wiki/index.php?title=LinkNode_R4:_Arduino-compatible_WiFi_relay_controller)
-[Gosund WP3 Smart Plug ](https://vmallet.com/2020/07/gosund-wp3-smart-plug-teardown-and-schematic/)
 
-### Camera Protocol
-[ONVIF Vs RTSP](https://ipvm.com/forums/video-surveillance/topics/very-confused-about-onvif-rtsp)
-[RTSP Wyzecam](https://www.youtube.com/watch?v=8JeMudwlOzM)
-[RTSP + App Wyzecam](https://www.youtube.com/watch?v=e0SgzWwt7yI)
 
 ### Load Code to IoT Devices
 [Install Arduino in Linux](https://www.arduino.cc/en/guide/linux)
