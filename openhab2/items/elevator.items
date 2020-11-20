@@ -4,8 +4,8 @@
 **/
 
 //Energia
-Switch  PowerStatus  "Estado"            <switch>
-Switch  PowerMode    "Modo Operativo"    <>
+Contact PowerStatus  "Estado"            <switch>           
+Switch  PowerMode    "Modo Operativo"    <NULL>
 
 //Sensores
 String  Motion       "Personas [%s]"	 <motion> 	//{channel="mqtt:topic:CasaDevice9:firekitchen_ch"}
