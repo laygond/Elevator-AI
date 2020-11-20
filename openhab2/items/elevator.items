@@ -3,7 +3,9 @@
 * itemtype itemname "labeltext [stateformat]" <iconname> (group1, group2, ...) ["tag1", "tag2", ...] {bindingconfig}
 **/
 
+//Energia
+Switch  PowerStatus  "Estado"            <switch>
+Switch  PowerMode    "Modo Operativo"    <>
 
-Switch  PowerStatus  "Estado" 
-Switch  PowerMode    "Modo Operativo"   
+//Sensores
 String  Motion       "Personas [%s]"	 <motion> 	//{channel="mqtt:topic:CasaDevice9:firekitchen_ch"}
