@@ -1,0 +1,17 @@
+// Use item names defined at /etc/openhab2/items/home.items
+ 
+sitemap home label="Laygond-AI"
+{
+    Frame label="Energia"
+    {
+        Switch item=PowerStatus
+        Switch item=PowerMode mappings=[0="OFF", 1="ON", 2="AUTO"]
+        
+    }
+
+    Frame label="Sensores"
+    {
+	    Text item=Motion  
+    }
+
+}
