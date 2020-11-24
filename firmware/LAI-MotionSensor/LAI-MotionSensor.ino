@@ -1,20 +1,43 @@
 /*
- * Device Title: MK-FireSensor V2
- * Device Description: MQTT Fire Sensor
- * Device Explanation: This device connects to your existing 
- *                     fire detectors and when they go off this
- *                     device sends an MQTT message to the server
- * Device information: https://www.MK-SmartHouse.com/fire-sensor
+ * < LAYGOND-AI >
+ * Device Title: LAI-MotionSensor
+ * Device Description: MQTT Motion Sensor
+ * Device Explanation: This device sends an MQTT message to the server when 
+ *                     there is motion inside an elevator cabin.
  *                     
- * Author: Matt Kaczynski
- * Website: http://www.MK-SmartHouse.com
+ *                     
+ * Author: Bryan Laygond
+ * Github: @laygond
  * 
- * Code may only be distrbuted through http://www.MK-SmartHouse.com any other methods
- * of obtaining or distributing are prohibited
- * Copyright (c) 2016-2018 
+ * Inspired by: 
+ * Matt Kaczynski http://www.MK-SmartHouse.com 
+ * Lady Ada https://learn.adafruit.com/
  * 
- * Note: After flashing the code once you can remotely access your device by going to http://HOSTNAMEOFDEVICE.local/firmware 
- * obviously replace HOSTNAMEOFDEVICE with whatever you defined below. The user name and password are also defined below.
+ * Code may only be distributed through https://github.com/laygond/Elevator-AI any 
+ * other methods of obtaining or distributing are prohibited.
+ * < LAYGOND-AI > Copyright (c) 2020
+ * 
+ * HARDWARE:
+ * - HC-SR501 PIR Motion Sensor 
+ * 
+ * REMOTE ACCESS:
+ * Once connected to your network you can access your ESP8266 ESP-12E by going to
+ * http://HOSTNAMEOFDEVICE.local or http://YOUR_DEVICE_IP. Update of firmware can 
+ * also be done remotely(manually) at http://YOUR_DEVICE_IP/firmware 
+ * 
+ * PREREQUISITES:
+ * In Arduino IDE Install the following:
+ * Under 'Sketch/Include Library/Manage Libraries'
+ * - ArduinoJson by Benoit Blanchon   Version 5.13.5 (V5 is a must)
+ * - MQTT        by Joel Gaehwiler    Version 2.4.7
+ * - WiFiManager by tzapu             Version 2.0.3  
+ * 
+ * Under 'File/Preferences/Additional Board Manage URL' include
+ * - http://arduino.esp8266.com/stable/package_esp8266com_index.json
+ * 
+ * Under 'Tools/Boards/Board Manager'
+ * - esp8266     by ESP8266 Community Version 2.5.0
+ * 
  */
 
 /* ---------- DO NOT EDIT ANYTHING IN THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING---------- */
@@ -45,7 +68,7 @@ char update_path[34] = "/firmware";
 const char* mqttDeviceID;
 
 //Form Custom SSID
-String ssidAP = "MK-FireSensor" + String(ESP.getChipId());
+String ssidAP = "LAI-Motion" + String(ESP.getChipId());
 
 //flag for saving data
 bool shouldSaveConfig = false;
@@ -64,11 +87,9 @@ long unsigned int lowIn;
 long unsigned int pause = 100;  
 
 //sensor variables
-boolean lockLow = true;
-boolean takeLowTime;  
-
-//the digital pin connected to the fire sensor's output
-int sensorPin = 13;  
+int sensorPin = 13;         //the digital pin connected to the pir sensor's output
+int pirState = LOW;         // we start, assuming no motion detected
+int val = 0;                // variable for reading the pin status  
 
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
@@ -131,7 +152,7 @@ void setup()
   WiFiManagerParameter custom_host("name", "Device Name", host, 32);
   
   WiFiManagerParameter custom_text3("<h1>MQTT</h1>");
-  WiFiManagerParameter custom_text4("<p>Enter the details of your MQTT server and then enter the topic for which the device sends Fire Detector State MQTT messages to. If your server requires authentication then set it to True and enter your server credentials otherwise leave it at false and keep the fields blank.</p>");
+  WiFiManagerParameter custom_text4("<p>Enter the details of your MQTT server and then enter the topic for which the device sends Motion Detector State MQTT messages to. If your server requires authentication then set it to True and enter your server credentials otherwise leave it at false and keep the fields blank.</p>");
   WiFiManagerParameter custom_mqtt_server("server", "MQTT Server IP", mqtt_server, 40);
   WiFiManagerParameter custom_mqtt_port("port", "MQTT Server Port", mqtt_port, 5);
   WiFiManagerParameter custom_mqtt_topic("topic", "MQTT Out Topic", mqtt_topic, 50);
@@ -265,7 +286,7 @@ void setup()
   httpServer.on("/", [](){
     if(!httpServer.authenticate(update_username, update_password))
       return httpServer.requestAuthentication();
-    httpServer.send(200, "text/plain", "Hostname: " + String(host) + "\nMQTT Server: " + String(mqtt_server) + "\nMQTT Port: " + String(mqtt_port) + "\nMQTT Authentication: " + String(mqtt_isAuthentication) + "\nMQTT Out Topic: " + String(mqtt_topic) + "\nTo update firmware go to: http://"+ String(host) + ".local" + String(update_path) + "\n*To reset device settings restart the device and quickly move the jumper from RUN to PGM, wait 10 seconds and put the jumper back to RUN.*");
+    httpServer.send(200, "text/plain", "< LAYGOND-AI > \nHostname: " + String(host) + "\nMQTT Server: " + String(mqtt_server) + "\nMQTT Port: " + String(mqtt_port) + "\nMQTT Authentication: " + String(mqtt_isAuthentication) + "\nMQTT Command Topic: " + String(mqtt_topic) + "\nMQTT Status Topic: " + String(mqtt_topic) + "/state" + "\nTo update firmware go to: http://"+ String(host) + ".local" + String(update_path) + "\n*To reset device parameter settings click on RST on the ESP8266 for 10 seconds.*");
   });
   httpServer.begin();
 
@@ -296,6 +317,7 @@ void connect()
     }
   }
 
+  WiFi.mode(WIFI_STA); //prevents broadcasting AP after connection
   client.subscribe(mqtt_topic);
 }
 
@@ -314,35 +336,25 @@ void loop()
   httpServer.handleClient();
 
   //Sensor Detection
-  
-  if(digitalRead(sensorPin) == HIGH)
-  {
-    if(lockLow)
-    {  
-      //makes sure we wait for a transition to LOW before any further output is made:
-      lockLow = false;            
-      client.publish(String(mqtt_topic), "No Fire Detected");  
-      delay(50);
-    }         
-    takeLowTime = true;
-  }
-
-  if(digitalRead(sensorPin) == LOW)
-  {       
-    if(takeLowTime)
+  val = digitalRead(sensorPin);   // read input value
+  if (val == HIGH)                // check if the input is HIGH
+  {            
+    if (pirState == LOW)
     {
-      lowIn = millis();          //save the time of the transition from high to LOW
-      takeLowTime = false;       //make sure this is only done at the start of a LOW phase
+      // sensor has been turned on
+      client.publish(String(mqtt_topic), "DETECTADO");
+      // We only want to print on the output change, not state
+      pirState = HIGH;
     }
-    //if the sensor is low for more than the given pause, 
-    //we assume that no more detection is going to happen
-    if(!lockLow && millis() - lowIn > pause)
-    {  
-      //makes sure this block of code is only executed again after 
-      //a new detection sequence has been detected
-      lockLow = true;                        
-      client.publish(String(mqtt_topic), "FIRE DETECTED!");
-      delay(50);
+  } 
+  else
+  {
+    if (pirState == HIGH)
+    {
+      // sensor has been turned off
+      client.publish(String(mqtt_topic), "Desocupado");
+      // We only want to print on the output change, not state
+      pirState = LOW;
     }
   }
 }

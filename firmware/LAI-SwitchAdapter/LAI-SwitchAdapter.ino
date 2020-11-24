@@ -1,24 +1,28 @@
-/**
- * MQTT Door Sensor: When the magnetic switch sensor is broken then 
- * the device sends an mqtt message to the defined server.
- * Inspired by Matt Kaczynski http://www.MK-SmartHouse.com
- * Modified by Bryan Laygond
+/*
+ * < LAYGOND-AI >
+ * Device Title: LAI-SwitchAdapter
+ * Device Description: MQTT Double Servo Control
+ * Device Explanation: The device recieves an MQTT message from the server and
+ *                     changes the position of two servo motors simultaneously
+ *                     to turn on/off an elevator switch
+ *                     
+ * Author: Bryan Laygond
+ * Github: @laygond
  * 
- * NETWORK AND SERVER SET-UP:
- * The MQTT Door Sensor connects automatically to your local network and
- * MQTT server if a configuration file is provided. If file not provided,
- * it allows for a manual wireless web configuration: search the device's
- * WiFi SSID (from phone, laptop, etc) and then fill the configuration
- * panel via web browser at 192.168.4.1
+ * Inspired by: 
+ * Matt Kaczynski http://www.MK-SmartHouse.com 
+ * Bill https://dronebotworkshop.com/
+ * 
+ * Code may only be distributed through https://github.com/laygond/Elevator-AI any 
+ * other methods of obtaining or distributing are prohibited.
+ * < LAYGOND-AI > Copyright (c) 2020
+ * 
  * 
  * REMOTE ACCESS:
- * Once connected to your network you can access your device by going to
- * http://HOSTNAMEOFDEVICE.local or http://YOUR_DEVICE_IP. Update of 
- * firmware can be done remotely(manually) at http://YOUR_DEVICE_IP/firmware 
+ * Once connected to your network you can access your ESP8266 ESP-12E by going to
+ * http://HOSTNAMEOFDEVICE.local or http://YOUR_DEVICE_IP. Update of firmware can 
+ * also be done remotely(manually) at http://YOUR_DEVICE_IP/firmware 
  * 
- * HARDWARE:
- * ESP8266 ESP-12E connected as MK-DoorSensor https://www.MK-SmartHouse.com/door-sensor
- *    
  * PREREQUISITES:
  * In Arduino IDE Install the following:
  * Under 'Sketch/Include Library/Manage Libraries'
@@ -32,27 +36,17 @@
  * Under 'Tools/Boards/Board Manager'
  * - esp8266     by ESP8266 Community Version 2.5.0
  * 
- * UPLOAD SET-UP:
- * In the physical hardware set the jumper pins to PGM for program
- * once upload is completed set jumper pins back to RUN
- * In Arduino IDE set: 
- *    Board: "Generic ESP8266 Module"
- *    Upload Speed: "115200" (or lower)
- *    Flash Size: "IM (64K SPIFFS)" (or lower)
- *    Flash Mode "DIO" (since ESP-12E)
- *    Reset Method: "nodemcu" (since ESP-12E)
- * 
- **/
-
-
+ */
+ 
+/* ---------- DO NOT EDIT ANYTHING IN THIS FILE UNLESS YOU KNOW WHAT YOU ARE DOING---------- */
 #include <FS.h>                   //this needs to be first, or it all crashes and burns...
-//#include <Servo.h> 
+#include <Servo.h> 
 #include <ESP8266WiFi.h>          //https://github.com/esp8266/Arduino
 #include <MQTTClient.h>           //https://github.com/256dpi/arduino-mqtt
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>          //https://github.com/tzapu/WiFiManager
-#include <ArduinoJson.h>          //https://github.com/bblanchon/ArduinoJson (Install version 5)
+#include <ArduinoJson.h>          //https://github.com/bblanchon/ArduinoJson
 #include <ESP8266mDNS.h>
 #include <ESP8266HTTPUpdateServer.h>
 
@@ -72,7 +66,7 @@ char update_path[34] = "/firmware";
 const char* mqttDeviceID;
 
 //Form Custom SSID
-String ssidAP = "MK-DoorSensor" + String(ESP.getChipId());
+String ssidAP = "LAI-Switch" + String(ESP.getChipId());
 
 //flag for saving data
 bool shouldSaveConfig = false;
@@ -83,27 +77,14 @@ void saveConfigCallback ()
   shouldSaveConfig = true;
 }
 
-//the time when the sensor outputs a low impulse
-long unsigned int lowIn;         
-
-//the amount of milliseconds the sensor has to be low 
-//before we assume all detection has stopped
-long unsigned int pause = 100;  
-
-//sensor variables
-boolean lockLow = true;
-boolean takeLowTime;  
-
-//the digital pin connected to the door sensor's output
-int sensorPin = 13;  
-
 ESP8266WebServer httpServer(80);
 ESP8266HTTPUpdateServer httpUpdater;
 
+Servo myservo1;
+Servo myservo2;
+
 WiFiClient net;
 MQTTClient client;
-
-unsigned long lastMillis = 0;
 
 void connect();
 
@@ -137,6 +118,7 @@ void setup()
           strcpy(mqtt_server, json["mqtt_server"]);
           strcpy(mqtt_port, json["mqtt_port"]);
           strcpy(mqtt_topic, json["mqtt_topic"]);
+
         } 
         else 
         {
@@ -158,10 +140,10 @@ void setup()
   WiFiManagerParameter custom_host("name", "Device Name", host, 32);
   
   WiFiManagerParameter custom_text3("<h1>MQTT</h1>");
-  WiFiManagerParameter custom_text4("<p>Enter the details of your MQTT server and then enter the topic for which the device sends Door State MQTT messages to. If your server requires authentication then set it to True and enter your server credentials otherwise leave it at false and keep the fields blank.</p>");
+  WiFiManagerParameter custom_text4("<p>Enter the details of your MQTT server and then enter the topic for which the device listens to MQTT commands from. If your server requires authentication then set it to True and enter your server credentials otherwise leave it at false and keep the fields blank.</p>");
   WiFiManagerParameter custom_mqtt_server("server", "MQTT Server IP", mqtt_server, 40);
   WiFiManagerParameter custom_mqtt_port("port", "MQTT Server Port", mqtt_port, 5);
-  WiFiManagerParameter custom_mqtt_topic("topic", "MQTT Out Topic", mqtt_topic, 50);
+  WiFiManagerParameter custom_mqtt_topic("topic", "MQTT Topic", mqtt_topic, 50);
   WiFiManagerParameter custom_mqtt_isAuthentication("isAuthentication", "MQTT Authentication?", mqtt_isAuthentication, 7);
   WiFiManagerParameter custom_mqtt_username("userMQTT", "Username For MQTT Account", mqtt_username, 40);
   WiFiManagerParameter custom_mqtt_password("passwordMQTT", "Password For MQTT Account", mqtt_password, 40);
@@ -171,8 +153,8 @@ void setup()
   WiFiManagerParameter custom_update_username("user", "Username For Web Updater", update_username, 40);
   WiFiManagerParameter custom_update_password("password", "Password For Web Updater", update_password, 40);
   WiFiManagerParameter custom_device_path("path", "Updater Path", update_path, 32);
-  WiFiManagerParameter custom_text7("<p>*To reset device settings restart the device and quickly move the jumper from RUN to PGM, wait 10 seconds and put the jumper back to RUN.*</p>");
-  WiFiManagerParameter custom_text8("");
+  WiFiManagerParameter custom_text8("<p>*To reset device parameter settings click on RST on the ESP8266 for 10 seconds.*</p>");
+  WiFiManagerParameter custom_text9("");
 
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
@@ -205,7 +187,6 @@ void setup()
   wifiManager.addParameter(&custom_update_username);
   wifiManager.addParameter(&custom_update_password);
   wifiManager.addParameter(&custom_device_path);
-  wifiManager.addParameter(&custom_text7);
   wifiManager.addParameter(&custom_text8);
   
   //reset settings - for testing
@@ -292,7 +273,7 @@ void setup()
   httpServer.on("/", [](){
     if(!httpServer.authenticate(update_username, update_password))
       return httpServer.requestAuthentication();
-    httpServer.send(200, "text/plain", "Hostname: " + String(host) + "\nMQTT Server: " + String(mqtt_server) + "\nMQTT Port: " + String(mqtt_port) + "\nMQTT Authentication: " + String(mqtt_isAuthentication) + "\nMQTT Out Topic: " + String(mqtt_topic) + "\nTo update firmware go to: http://"+ String(host) + ".local" + String(update_path) + "\n*To reset device settings restart the device and quickly move the jumper from RUN to PGM, wait 10 seconds and put the jumper back to RUN.*");
+    httpServer.send(200, "text/plain", "< LAYGOND-AI > \nHostname: " + String(host) + "\nMQTT Server: " + String(mqtt_server) + "\nMQTT Port: " + String(mqtt_port) + "\nMQTT Authentication: " + String(mqtt_isAuthentication) + "\nMQTT Command Topic: " + String(mqtt_topic) + "\nMQTT Status Topic: " + String(mqtt_topic) + "/state" + "\nTo update firmware go to: http://"+ String(host) + ".local" + String(update_path) + "\n*To reset device parameter settings click on RST on the ESP8266 for 10 seconds.*");
   });
   httpServer.begin();
 
@@ -322,8 +303,10 @@ void connect()
       delay(1000);
     }
   }
-
+  
+  WiFi.mode(WIFI_STA); //prevents broadcasting AP after connection
   client.subscribe(mqtt_topic);
+  client.publish(String(mqtt_topic) + "/state", String((int)((myservo1.read() / 1.8) + 0.5)));
 }
 
 void loop() 
@@ -339,42 +322,115 @@ void loop()
   }
 
   httpServer.handleClient();
-
-  //Sensor Detection
-  
-  if(digitalRead(sensorPin) == HIGH)
-  {
-    if(lockLow)
-    {  
-      //makes sure we wait for a transition to LOW before any further output is made:
-      lockLow = false;            
-      client.publish(String(mqtt_topic), "OPEN");  
-      delay(50);
-    }         
-    takeLowTime = true;
-  }
-
-  if(digitalRead(sensorPin) == LOW)
-  {       
-    if(takeLowTime)
-    {
-      lowIn = millis();          //save the time of the transition from high to LOW
-      takeLowTime = false;       //make sure this is only done at the start of a LOW phase
-    }
-    //if the sensor is low for more than the given pause, 
-    //we assume that no more detection is going to happen
-    if(!lockLow && millis() - lowIn > pause)
-    {  
-      //makes sure this block of code is only executed again after 
-      //a new detection sequence has been detected
-      lockLow = true;                        
-      client.publish(String(mqtt_topic), "CLOSED");
-      delay(50);
-    }
-  }
 }
 
 void messageReceived(String &topic, String &payload) 
 {
-  //This sensor does not recieve anything from MQTT Server so this is blank
+  String msgString = payload;
+  //int intMsgString = payload;
+
+  if (msgString == "ON")
+  {
+    moveSwitch(30); //degree difference from a 90 degree position
+    client.publish(String(mqtt_topic) + "/state", "ON");            
+  }
+  else if (msgString == "OFF")
+  {
+    moveSwitch(-30);
+    client.publish(String(mqtt_topic) + "/state", "OFF");               
+  }
+  else if (isValidNumber(msgString))
+  {
+    moveSwitch(int(msgString.toInt() * 1.8)- 90); //input as percentage 50% = 90 degrees
+    client.publish(String(mqtt_topic) + "/state", String(int(myservo1.read())));             
+  }
+}
+
+boolean isValidNumber(String str)
+{
+   boolean isNum=false;
+   if(!(str.charAt(0) == '+' || str.charAt(0) == '-' || isDigit(str.charAt(0)))) return false;
+
+   for(byte i=1;i<str.length();i++)
+   {
+       if(!(isDigit(str.charAt(i)) || str.charAt(i) == '.')) return false;
+   }
+   return true;
+}
+
+
+void moveSwitch(double delta) //degree difference from a 90 degree position   
+{  
+  myservo1.attach(12);
+  myservo2.attach(13);
+
+  //Center position
+  if(90 < myservo1.read())
+  {
+    for (int tempPos = myservo1.read(); 90 <= tempPos; tempPos--)
+    {
+       myservo1.write(tempPos);
+       myservo2.write(180-tempPos);             
+       delay(40);
+    }
+  }
+  else
+  {
+    for (int tempPos = myservo1.read(); 90 >= tempPos; tempPos++)
+    {
+       myservo1.write(tempPos);   
+       myservo2.write(180-tempPos);          
+       delay(40);
+    }
+  }
+
+  //Check within range
+  if (delta <= 90 && delta >= -90)
+  {
+    double pos = 90+delta;
+
+    //Move pair of servos to pos
+    if(pos < myservo1.read())
+    {
+      for (int tempPos = myservo1.read(); pos <= tempPos; tempPos--)
+      {
+         myservo1.write(tempPos);
+         myservo2.write(180-tempPos);             
+         delay(40);
+      }
+    }
+    else
+    {
+      for (int tempPos = myservo1.read(); pos >= tempPos; tempPos++)
+      {
+         myservo1.write(tempPos);   
+         myservo2.write(180-tempPos);          
+         delay(40);
+      }
+    }
+
+    //Recenter position
+    if(90 < myservo1.read())
+    {
+      for (int tempPos = myservo1.read(); 90 <= tempPos; tempPos--)
+      {
+         myservo1.write(tempPos);
+         myservo2.write(180-tempPos);             
+         delay(40);
+      }
+    }
+    else
+    {
+      for (int tempPos = myservo1.read(); 90 >= tempPos; tempPos++)
+      {
+         myservo1.write(tempPos);   
+         myservo2.write(180-tempPos);          
+         delay(40);
+      }
+    }
+  }
+
+  //Detach
+  myservo1.detach();
+  myservo2.detach();
 }
