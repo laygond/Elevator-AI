@@ -4,7 +4,7 @@
 **/
 
 //Energia
-Contact PowerStatus  "Estado"            <switch>           
+Contact PowerStatus  "Estado [%s]"       <switch>           
 Switch  PowerMode    "Modo Operativo"    <NULL>
 
 //Sensores

@@ -4,7 +4,7 @@ sitemap elevator label="Laygond-AI"
 {
     Frame label="Energia"
     {
-        Text item=PowerStatus mappings=[OPEN="APAGADO", CLOSE="ENCENDIDO"] valuecolor=[OPEN="red", CLOSE="green"]
+        Text item=PowerStatus
         Switch item=PowerMode mappings=[0="OFF", 1="ON", 2="AUTO"]
         
     }

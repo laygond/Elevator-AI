@@ -4,7 +4,7 @@ when
 then
     switch (PowerMode.state as DecimalType) {
         case 0 : PowerStatus.sendCommand(OPEN)
-        case 1 : PowerStatus.sendCommand(CLOSE)
+        case 1 : PowerStatus.sendCommand(CLOSED)
         case 2 : {
             //put auto code here or trigger another rule to execute auto code
         }
