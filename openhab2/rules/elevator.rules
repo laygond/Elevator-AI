@@ -1,12 +1,38 @@
 rule "Power Mode Options"
 when
-    Item PowerMode changed
+    Item PowerMode received update
 then
-    switch (PowerMode.state as DecimalType) {
-        case 0 : PowerStatus.sendCommand(OPEN)
-        case 1 : PowerStatus.sendCommand(CLOSED)
-        case 2 : {
-            //put auto code here or trigger another rule to execute auto code
-        }
+    
+    if (PowerMode.state == "OFF")
+    {    
+        //TODO:  
+        //Check SwitchNet and PowerNet is within range otherwise send elevator to Lobby  
+        //Check Power Status is ON to proceed
+        //Move switch one way then check Power Status if not OFF then move switch other way 
+        SwitchAdapter.sendCommand("OFF")
+        //TEMPORAL (JUST FOR DISPLAY)
+        PowerStatus.sendCommand("APAGADO")
+    }
+    if (PowerMode.state == "ON")
+    {        
+        //TODO:
+        //Check SwitchNet and PowerNet is within range 
+        //Check Power Status is OFF to proceed
+        //Move switch one way then check Power Status if not ON then move switch other way 
+        SwitchAdapter.sendCommand("ON")
+        //TEMPORAL (JUST FOR DISPLAY)
+        PowerStatus.sendCommand("ENCENDIDO")
+    }
+    if (PowerMode.state == "AUTO")
+    {       
+        //TODO: 
+        //while (PowerMode.state == "AUTO")
+        //Check time, if time 8 AM and SwitchNet within range
+        //Check Power Status is OFF to proceed
+        //Move switch one way then check Power Status if not OFF then move switch other way 
+        //Check time, if time 8 PM send elevator to Lobby so that SwitchNet within range
+        //Check Power Status is ON to proceed
+        //Move switch one way then check Power Status if not ON then move switch other way 
+        
     }
 end

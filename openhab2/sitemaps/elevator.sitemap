@@ -5,7 +5,7 @@ sitemap elevator label="Laygond-AI"
     Frame label="Energia"
     {
         Text item=PowerStatus
-        Switch item=PowerMode mappings=[0="OFF", 1="ON", 2="AUTO"]
+        Switch item=PowerMode mappings=["OFF"="OFF", "ON"="ON", "AUTO"="AUTO"]
         
     }
 

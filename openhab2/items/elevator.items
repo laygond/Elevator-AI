@@ -4,8 +4,11 @@
 **/
 
 //Energia
-Contact PowerStatus  "Estado [%s]"       <switch>           
+String  PowerStatus  "Estado [%s]"       <switch>           
 Switch  PowerMode    "Modo Operativo"    <NULL>
 
+//Controller
+String  SwitchAdapter "Switch Adapter"   <NULL>     {channel="mqtt:topic:LAI-SwitchAdapter:switch_ch"}
+
 //Sensores
-String  Motion       "Personas [%s]"	 <motion> 	//{channel="mqtt:topic:CasaDevice9:firekitchen_ch"}
+String  Motion        "Personas [%s]"	 <motion> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
