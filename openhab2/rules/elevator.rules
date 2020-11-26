@@ -9,7 +9,7 @@ then
         //Check SwitchNet and PowerNet is within range otherwise send elevator to Lobby  
         //Check Power Status is ON to proceed
         //Move switch one way then check Power Status if not OFF then move switch other way 
-        SwitchAdapter.sendCommand("OFF")
+        SwitchAdapter.sendCommand(OFF)
         //TEMPORAL (JUST FOR DISPLAY)
         PowerStatus.sendCommand("APAGADO")
     }
@@ -19,7 +19,7 @@ then
         //Check SwitchNet and PowerNet is within range 
         //Check Power Status is OFF to proceed
         //Move switch one way then check Power Status if not ON then move switch other way 
-        SwitchAdapter.sendCommand("ON")
+        SwitchAdapter.sendCommand(ON)
         //TEMPORAL (JUST FOR DISPLAY)
         PowerStatus.sendCommand("ENCENDIDO")
     }
