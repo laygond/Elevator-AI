@@ -12,6 +12,7 @@ sitemap elevator label="Laygond-AI"
     Frame label="Sensores"
     {
 	    Text item=Motion  
+	    Text item=motion_contact_test  
     }
 
 }

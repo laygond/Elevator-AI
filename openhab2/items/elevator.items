@@ -12,3 +12,4 @@ String  SwitchAdapter "Switch Adapter"   <NULL>     {channel="mqtt:topic:LAI-Swi
 
 //Sensores
 String  Motion        "Personas [%s]"	 <motion> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
+Contact  motion_contact_test    "Cabina [MAP(motion_contact.map):%s]"	 <switch> 	{channel="mqtt:topic:LAI-MotionSensor2:motion2_ch"}
