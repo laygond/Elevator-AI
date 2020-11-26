@@ -3,7 +3,7 @@ when
     Item PowerMode received update
 then
     
-    if (PowerMode.state == "OFF")
+    if (PowerMode.state.toString == "0")
     {    
         //TODO:  
         //Check SwitchNet and PowerNet is within range otherwise send elevator to Lobby  
@@ -11,9 +11,9 @@ then
         //Move switch one way then check Power Status if not OFF then move switch other way 
         SwitchAdapter.sendCommand(OFF)
         //TEMPORAL (JUST FOR DISPLAY)
-        PowerStatus.sendCommand("APAGADO")
+        PowerStatus.state = "OFF")
     }
-    if (PowerMode.state == "ON")
+    if (PowerMode.state.toString == "1")
     {        
         //TODO:
         //Check SwitchNet and PowerNet is within range 
@@ -23,7 +23,7 @@ then
         //TEMPORAL (JUST FOR DISPLAY)
         PowerStatus.sendCommand("ENCENDIDO")
     }
-    if (PowerMode.state == "AUTO")
+    if (PowerMode.state.toString == "2")
     {       
         //TODO: 
         //while (PowerMode.state == "AUTO")

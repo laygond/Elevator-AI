@@ -5,7 +5,8 @@
 
 //Energia
 String  PowerStatus  "Estado [%s]"       <switch>           
-Switch  PowerMode    "Modo Operativo"    <NULL>
+String  PowerMode    "Modo Operativo"    <NULL>
+String  TimerAuto    "Horario 8AM-8PM"   <time>
 
 //Controller
 String  SwitchAdapter "Switch Adapter"   <NULL>     {channel="mqtt:topic:LAI-SwitchAdapter:switch_ch"}
