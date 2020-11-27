@@ -11,7 +11,8 @@ sitemap elevator label="Laygond-AI"
 
     Frame label="Sensores"
     {
-	    Text item=MotionSensor  
+	    Text item=MotionSensor
+        Text item=PowerNet  
 	      
     }
 

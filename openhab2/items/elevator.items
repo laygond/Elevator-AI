@@ -13,3 +13,4 @@ Switch  SwitchAdapter "Switch Adapter"                  <NULL>     {channel="mqt
 
 //Sensores
 Contact  MotionSensor "Personas [MAP(motion_contact.map):%s]"	 <movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
+Switch   PowerNet     "Switch [MAP(network.map):%s]"	 <network> 	{channel="network:pingdevice:192_168_0_164:online"}
