@@ -7,12 +7,12 @@ Bridge mqtt:systemBroker:embedded-mqtt-broker [ host="192.168.0.205", secure=fal
 
     Thing mqtt:topic:LAI-MotionSensor "Motion Sensor" {
     Channels:
-        Type string : motion_ch "Motion Sensor" [ stateTopic="elevator/sensor/motion" ]
+        Type contact : motion_ch "Motion Sensor" [ stateTopic="elevator/sensor/motion" ]
     }
     
     Thing mqtt:topic:LAI-SwitchAdapter "Switch Adapter" {
     Channels:
-        Type string : switch_ch "Switch Adapter" [ stateTopic="elevator/control/switch/state" , commandTopic="elevator/control/switch" ]
+        Type switch : switch_ch "Switch Adapter" [ stateTopic="elevator/control/switch/state" , commandTopic="elevator/control/switch" ]
     }
 
 }

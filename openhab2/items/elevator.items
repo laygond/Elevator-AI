@@ -5,11 +5,11 @@
 
 //Energia
 Switch  PowerStatus  "Estado [MAP(energia.map):%s]"     <switch>           
-String  PowerMode    "Modo Operativo"                   <NULL>
+String  PowerMode    "Modo"                   <NULL>
 String  TimerAuto    "Horario 8AM-8PM"                  <time>
 
 //Controller
 Switch  SwitchAdapter "Switch Adapter"                  <NULL>     {channel="mqtt:topic:LAI-SwitchAdapter:switch_ch"}
 
 //Sensores
-Contact  MotionSensor "Personas en Cabina [MAP(motion_contact.map):%s]"	 <movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
+Contact  MotionSensor "Personas [MAP(motion_contact.map):%s]"	 <movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
