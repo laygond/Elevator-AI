@@ -342,7 +342,7 @@ void loop()
     if (pirState == LOW)
     {
       // sensor has been turned on
-      client.publish(String(mqtt_topic), "DETECTADO");
+      client.publish(String(mqtt_topic), "OPEN");
       // We only want to print on the output change, not state
       pirState = HIGH;
     }
@@ -352,7 +352,7 @@ void loop()
     if (pirState == HIGH)
     {
       // sensor has been turned off
-      client.publish(String(mqtt_topic), "Desocupado");
+      client.publish(String(mqtt_topic), "CLOSED");
       // We only want to print on the output change, not state
       pirState = LOW;
     }
