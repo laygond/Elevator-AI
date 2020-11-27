@@ -4,7 +4,7 @@
 **/
 
 //Energia
-String  PowerStatus  "Estado [%s]"       <switch>           
+Switch  PowerStatus  "Estado [%s]"       <switch>           
 String  PowerMode    "Modo Operativo"    <NULL>
 String  TimerAuto    "Horario 8AM-8PM"   <time>
 

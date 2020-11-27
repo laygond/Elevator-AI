@@ -11,7 +11,8 @@ then
         //Move switch one way then check Power Status if not OFF then move switch other way 
         SwitchAdapter.sendCommand(OFF)
         //TEMPORAL (JUST FOR DISPLAY)
-        PowerStatus.state = "OFF")
+        PowerStatus.sendCommand(OFF)
+        logInfo("P-Mode", "OFF")
     }
     if (PowerMode.state.toString == "1")
     {        
@@ -21,7 +22,8 @@ then
         //Move switch one way then check Power Status if not ON then move switch other way 
         SwitchAdapter.sendCommand(ON)
         //TEMPORAL (JUST FOR DISPLAY)
-        PowerStatus.sendCommand("ENCENDIDO")
+        PowerStatus.sendCommand(ON)
+        logInfo("P-Mode", "ON")
     }
     if (PowerMode.state.toString == "2")
     {       
@@ -33,6 +35,6 @@ then
         //Check time, if time 8 PM send elevator to Lobby so that SwitchNet within range
         //Check Power Status is ON to proceed
         //Move switch one way then check Power Status if not ON then move switch other way 
-        
+         logInfo("P-Mode", "AUTO")
     }
 end
