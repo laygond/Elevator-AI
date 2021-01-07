@@ -16,13 +16,13 @@ Contact  MotionSensor "Personas [MAP(motion_contact.map):%s]"	 <movement> 	{chan
 Switch   PowerNet     "Switch [MAP(network.map):%s]"	 <network> 	{channel="network:pingdevice:192_168_0_164:online"}
 
 //Piso & Oficinas
-Group PisosYOficinas "Activar/Desactivar" <NULL> 
-Switch P1O1 "Oficina 1"  <1>   (PisosYOficinas)
-Switch P1O2 "Oficina 2" <NULL> (PisosYOficinas)
-Switch P1O3 "Oficina 3" <NULL> (PisosYOficinas)
+Group PisosYOficinas "Des / Activar" <lightning>
+Switch P1O1 "OF. 1"  <1>   (PisosYOficinas)
+Switch P1O2 "OFFICINA 2" <NULL> (PisosYOficinas)
+Switch P1O3 "OFC. 3" <NULL> (PisosYOficinas)
 Switch P1O4 "Oficina 4" <NULL> (PisosYOficinas)
-Switch P1O5 "Oficina 5" <NULL> (PisosYOficinas)
-Switch P2O1 "Oficina 1" <2> (PisosYOficinas)
+Switch P1O5 "        5" <NULL> (PisosYOficinas)
+Switch P2O1  <2> (PisosYOficinas)
 Switch P2O2 <NULL> (PisosYOficinas)
 Switch P2O3 <NULL> (PisosYOficinas)
 Switch P2O4 <NULL> (PisosYOficinas)
