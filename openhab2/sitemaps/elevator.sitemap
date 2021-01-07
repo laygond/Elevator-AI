@@ -18,55 +18,56 @@ sitemap elevator label="Laygond-AI"
 
     Frame label="NFC Tags"
     {
-	    Frame label="Activar/Desactivar"
-        {
-            Switch item=P1O1
-            Switch item=P1O2
-            Switch item=P1O3
-            Switch item=P1O4
-            Switch item=P1O5
-            Switch item=P2O1
-            Switch item=P2O2
-            Switch item=P2O3
-            Switch item=P2O4
-            Switch item=P2O5
-            Switch item=P3O1
-            Switch item=P3O2
-            Switch item=P3O3
-            Switch item=P3O4
-            Switch item=P3O5
-            Switch item=P4O1
-            Switch item=P4O2
-            Switch item=P4O3
-            Switch item=P4O4
-            Switch item=P4O5
-            Switch item=P5O1
-            Switch item=P5O2
-            Switch item=P5O3
-            Switch item=P5O4
-            Switch item=P5O5
-            Switch item=P6O1
-            Switch item=P6O2
-            Switch item=P6O3
-            Switch item=P6O4
-            Switch item=P6O5
-            Switch item=P7O1
-            Switch item=P7O2
-            Switch item=P7O3
-            Switch item=P7O4
-            Switch item=P7O5
-            Switch item=P8O1
-            Switch item=P8O2
-            Switch item=P8O3
-            Switch item=P8O4
-            Switch item=P8O5
-            Switch item=P9O1
-            Switch item=P9O2
-            Switch item=P9O3
-            Switch item=P9O4
-            Switch item=P9O5
+        Group item=PisosYOficinas 
+	    // Frame label="Activar/Desactivar"
+        // {
+        //     Switch item=P1O1
+        //     Switch item=P1O2
+        //     Switch item=P1O3
+        //     Switch item=P1O4
+        //     Switch item=P1O5
+        //     Switch item=P2O1
+        //     Switch item=P2O2
+        //     Switch item=P2O3
+        //     Switch item=P2O4
+        //     Switch item=P2O5
+        //     Switch item=P3O1
+        //     Switch item=P3O2
+        //     Switch item=P3O3
+        //     Switch item=P3O4
+        //     Switch item=P3O5
+        //     Switch item=P4O1
+        //     Switch item=P4O2
+        //     Switch item=P4O3
+        //     Switch item=P4O4
+        //     Switch item=P4O5
+        //     Switch item=P5O1
+        //     Switch item=P5O2
+        //     Switch item=P5O3
+        //     Switch item=P5O4
+        //     Switch item=P5O5
+        //     Switch item=P6O1
+        //     Switch item=P6O2
+        //     Switch item=P6O3
+        //     Switch item=P6O4
+        //     Switch item=P6O5
+        //     Switch item=P7O1
+        //     Switch item=P7O2
+        //     Switch item=P7O3
+        //     Switch item=P7O4
+        //     Switch item=P7O5
+        //     Switch item=P8O1
+        //     Switch item=P8O2
+        //     Switch item=P8O3
+        //     Switch item=P8O4
+        //     Switch item=P8O5
+        //     Switch item=P9O1
+        //     Switch item=P9O2
+        //     Switch item=P9O3
+        //     Switch item=P9O4
+        //     Switch item=P9O5
            
-        }
+        // }
 	    
     }
 
