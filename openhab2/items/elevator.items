@@ -14,3 +14,50 @@ Switch  SwitchAdapter "Switch Adapter"                  <NULL>     {channel="mqt
 //Sensores
 Contact  MotionSensor "Personas [MAP(motion_contact.map):%s]"	 <movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
 Switch   PowerNet     "Switch [MAP(network.map):%s]"	 <network> 	{channel="network:pingdevice:192_168_0_164:online"}
+
+//Piso & Oficinas
+Switch P1O1 "Oficina 1"  <1>
+Switch P1O2 "Oficina 2" <NULL>
+Switch P1O3 "Oficina 3" <NULL>
+Switch P1O4 "Oficina 4" <NULL>
+Switch P1O5 "Oficina 5" <NULL>
+Switch P2O1 "Oficina 1" <2>
+Switch P2O2 <NULL>
+Switch P2O3 <NULL>
+Switch P2O4 <NULL>
+Switch P2O5 <NULL>
+Switch P3O1 <3>
+Switch P3O2 <NULL>
+Switch P3O3 <NULL>
+Switch P3O4 <NULL>
+Switch P3O5 <NULL>
+Switch P4O1 <4>
+Switch P4O2 <NULL>
+Switch P4O3 <NULL>
+Switch P4O4 <NULL>
+Switch P4O5 <NULL>
+Switch P5O1 <5>
+Switch P5O2 <NULL>
+Switch P5O3 <NULL>
+Switch P5O4 <NULL>
+Switch P5O5 <NULL>
+Switch P6O1 <6>
+Switch P6O2 <NULL>
+Switch P6O3 <NULL>
+Switch P6O4 <NULL>
+Switch P6O5 <NULL>
+Switch P7O1 <7>
+Switch P7O2 <NULL>
+Switch P7O3 <NULL>
+Switch P7O4 <NULL>
+Switch P7O5 <NULL>
+Switch P8O1 <8>
+Switch P8O2 <NULL>
+Switch P8O3 <NULL>
+Switch P8O4 <NULL>
+Switch P8O5 <NULL>
+Switch P9O1 <9>
+Switch P9O2 <NULL>
+Switch P9O3 <NULL>
+Switch P9O4 <NULL>
+Switch P9O5 <NULL>
