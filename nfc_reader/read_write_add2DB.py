@@ -1,13 +1,13 @@
 # -----------------------------
 #   USAGE
 # -----------------------------
-# python read_write_add2DB.py --output database.cvs --write 1 
+# python read_write_add2DB.py --output database.csv --write 1 
 #
 # DESCRIPTION:
 # Reads continously UUID from NFC tags: cards, phones, etc
 # If an output file is provided then each UUID entry is added to the DataBase
 # The code automatically prevents UUID duplicates or classic phone errors such as 11223344 
-# If the write flag is on then provided NDEF records are written to every card scanned
+# If the write flag is on, then provided NDEF records are written to every card scanned
 #
 # Author: Bryan Laygond
 # Website: http://www.laygond.com
