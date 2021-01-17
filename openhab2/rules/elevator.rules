@@ -38,3 +38,9 @@ then
         //logInfo("P-Mode", "AUTO")
     }
 end
+
+rule "Activate Floor&Offices"
+when
+    Member of PisosYOficinas received update
+then
+    logInfo("test", "it was mary")

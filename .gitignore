@@ -1,2 +1,5 @@
 sample.mp4
 .ipynb_checkpoints
+nfc_reader/read_copy.py
+nfc_reader/read_pc_delayed.py
+nfc_reader/read_pc_faster.py
