@@ -6,7 +6,7 @@ then
         var String results = ""
         logInfo("startupRule", "Before")
         //results = executeCommandLine("source /home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 3000)
-        results = executeCommandLine("source ~/.virtualenvs/virtual_OH/bin/activate", 5000)
+        results = executeCommandLine(". ~/.virtualenvs/virtual_OH/bin/activate", 5000)
         logInfo("startupRule", "Results are: " + results)
     ])
 end
