@@ -5,7 +5,7 @@ then
     createTimer(now.plusSeconds(10), [|
         var String results = ""
         logInfo("startupRule", "Before")
-        results = executeCommandLine("source@@/home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 5000)
+        results = executeCommandLine("source /home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 5000)
         logInfo("startupRule", "Results are: " + results)
     ])
 end
@@ -58,6 +58,7 @@ then
     logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
     var String results = ""
     executeCommandLine("source@@~/.virtualenvs/virtual_OH/bin/activate", 5000)
+    executeCommandLine("source ~/.virtualenvs/virtual_OH/bin/activate", 5000)
     results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
     logInfo("execRule", "Results are: " + results)
 end
