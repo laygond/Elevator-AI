@@ -1,8 +1,18 @@
+rule "ON Startup"
+when
+    System started
+then
+    createTimer(now.plusSeconds(10), [|
+        var String results = ""
+        results = executeCommandLine("source /home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 3000)
+        logInfo("startupRule", "Results are: " + results)
+    ])
+end
+
 rule "Power Mode Options"
 when
     Item PowerMode received update
-then
-    
+then 
     if (PowerMode.state.toString == "0")
     {    
         //TODO:  
@@ -56,5 +66,5 @@ when
 then
     logInfo("test", P1O3.state.toString)
     logInfo("test2", receivedCommand.toString)
-    P1O4.postUpdate(ON)
+    P1O4.postUpdate(receivedCommand)
 end
