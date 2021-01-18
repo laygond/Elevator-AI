@@ -58,6 +58,8 @@ df.to_csv('groupData.csv', index=False)
 # Reading as list and then converting seems faster
 # * try  a pure a list solution
 # * try csv.DictReader too
+# https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
+# 
 # start  = time.time()
 # with open('groupData.csv','r') as dest_f:
 #     data_iter = csv.reader(dest_f,
