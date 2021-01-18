@@ -4,6 +4,7 @@ when
 then
     createTimer(now.plusSeconds(10), [|
         var String results = ""
+        logInfo("startupRule", "Before")
         results = executeCommandLine("source /home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 3000)
         logInfo("startupRule", "Results are: " + results)
     ])
