@@ -45,32 +45,33 @@ when
     Member of PisosYOficinas received command
 then
     logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
-    
+end
 
 rule "P1O1 RULEBABY"
 when
-    Item P101 changed
+    Item P1O1 changed
 then
     logInfo("test", P101.state.toString)
     var String results = ""
     results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
     logInfo("Power_Plug", "Results are: " + results)
-
+end
 
 rule "P1O2 RULEBABY"
 when
-    Item P102 received command
+    Item P1O2 received command
 then
-    logInfo("test", P102.state.toString)
+    logInfo("test", P1O2.state.toString)
     var String results = ""
     results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
     logInfo("Power_Plug", "Results are: " + results)
-
+end
 
 rule "P1O3 RULEBABY"
 when
-    Item P103 received command
+    Item P1O3 received command
 then
-    logInfo("test", P103.state.toString)
+    logInfo("test", P1O3.state.toString)
     logInfo("test2", receivedCommand.toString)
     P1O4.postUpdate(ON)
+end
