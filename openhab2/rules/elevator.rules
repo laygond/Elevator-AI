@@ -40,31 +40,14 @@ then
 end
 
 
-rule "Group"
+rule "Pisos Y Oficinas"
 when
     Member of PisosYOficinas received command
 then
     logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
-end
-
-rule "P1O1 RULEBABY"
-when
-    Item P1O1 changed
-then
-    logInfo("test", P101.state.toString)
     var String results = ""
     results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
-    logInfo("Power_Plug", "Results are: " + results)
-end
-
-rule "P1O2 RULEBABY"
-when
-    Item P1O2 received command
-then
-    logInfo("test", P1O2.state.toString)
-    var String results = ""
-    results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
-    logInfo("Power_Plug", "Results are: " + results)
+    logInfo("execRule", "Results are: " + results)
 end
 
 rule "P1O3 RULEBABY"
