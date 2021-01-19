@@ -57,9 +57,8 @@ when
 then
     logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
     var String results = ""
-    executeCommandLine("source@@~/.virtualenvs/virtual_OH/bin/activate", 5000)
-    executeCommandLine("source ~/.virtualenvs/virtual_OH/bin/activate", 5000)
     results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
     logInfo("execRule", "Results are: " + results)
 end
 
