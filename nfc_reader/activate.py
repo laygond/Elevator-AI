@@ -35,6 +35,7 @@ import csv
 import pandas as pd
 import time
 import argparse
+import os 
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -45,7 +46,9 @@ ap.add_argument("-s", "--switch", type=str, default="",
 args = vars(ap.parse_args())
 
 # Read csv and find row of Floor&Office
-df = pd.read_csv('groupData.csv')
+dir_path = os.path.dirname(os.path.realpath(__file__))
+cvs_path = os.path.join(dir_path,'groupData.csv')
+df = pd.read_csv(cvs_path)
 index_row = df.index[df['PisoOficina'].str.contains(args["input"], na=False)]
 
 # Toggle Active Status column on csv
@@ -62,7 +65,7 @@ if len(floorOffices) > 4: # then it has more
     print(",".join([elem for elem in floorOffices]))
 
 # Update csv file 
-df.to_csv('groupData.csv', index=False)
+df.to_csv(cvs_path, index=False)
 
 # TODO:
 # Reading as list and then converting seems faster
