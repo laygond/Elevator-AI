@@ -57,9 +57,15 @@ when
 then
     logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
     var String results = ""
-    results = executeCommandLine("python /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
-    logInfo("execRule", "Results are: " + results)
+    logInfo("execRule1", "Results are: " + results)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P2O2", 5000)
+    logInfo("execRule2", "Results are: " + results)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P3O4", 5000)
+    logInfo("execRule3", "Results are: " + results)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand, 5000)
+    logInfo("execRule4", "Results are: " + results)
+
 end
 
 rule "P1O3 RULEBABY"
