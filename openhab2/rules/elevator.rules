@@ -64,7 +64,7 @@ then
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P3O4", 5000)
     logInfo("execRule3", "Results are: " + results)
 
-    logInfo("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand)
+    logInfo("execPrint","python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand)
 
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P3O4 --switch ON", 5000)
     logInfo("execRule4", "Results are: " + results)
