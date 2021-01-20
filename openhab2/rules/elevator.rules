@@ -58,10 +58,11 @@ then
     var String results = ""
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand, 5000)
     logInfo("execRule", "Results are: " + results)
-    results.split(",").forEach(postUpdate(receivedCommand))
-//     numbers.forEach(function(number) {
-//     console.log(number);
-// });
+    for (String i : results.split(","))
+    {
+        logInfo("execRule", "Hola " + i)
+        postUpdate(receivedCommand)
+    }
 
 end
 
