@@ -56,21 +56,13 @@ when
     Member of PisosYOficinas received command
 then
     var String results = ""
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand, 5000)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand, 4000)
     logInfo("execRule", "Results are: " + results)
-    for (String i : results.split(","))
+    if (results != "")
     {
-        logInfo("execRule", "Hola " + i)
-        postUpdate(i,receivedCommand.toString)
+        for (String i : results.split(","))
+        {
+            postUpdate(i,receivedCommand.toString)
+        }
     }
-
-end
-
-rule "P1O3 RULEBABY"
-when
-    Item P1O3 received command
-then
-    logInfo("test", P1O3.state.toString)
-    logInfo("test2", receivedCommand.toString)
-    postUpdate('P1O4', receivedCommand)
 end
