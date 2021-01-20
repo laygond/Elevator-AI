@@ -61,7 +61,7 @@ then
     for (String i : results.split(","))
     {
         logInfo("execRule", "Hola " + i)
-        postUpdate(i,receivedCommand)
+        postUpdate(i,receivedCommand.toString)
     }
 
 end
@@ -72,5 +72,5 @@ when
 then
     logInfo("test", P1O3.state.toString)
     logInfo("test2", receivedCommand.toString)
-    P1O4.postUpdate(receivedCommand)
+    postUpdate('P1O4', receivedCommand)
 end
