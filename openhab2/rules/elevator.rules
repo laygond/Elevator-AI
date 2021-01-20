@@ -55,21 +55,13 @@ rule "Pisos Y Oficinas"
 when
     Member of PisosYOficinas received command
 then
-    logInfo("GroupRule", "Member " + triggeringItem.name + " to MUHAHA" + receivedCommand)
     var String results = ""
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P5O4", 5000)
-    logInfo("execRule1", "Results are: " + results)
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P2O2", 5000)
-    logInfo("execRule2", "Results are: " + results)
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P3O4", 5000)
-    logInfo("execRule3", "Results are: " + results)
-
-    logInfo("execPrint","python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand)
-
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input P3O4 --switch ON", 5000)
-    logInfo("execRule4", "Results are: " + results)
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate.py --input " + triggeringItem.name + " --switch " + receivedCommand, 5000)
-    logInfo("execRule5", "Results are: " + results)
+    logInfo("execRule", "Results are: " + results)
+    results.split(",").forEach(postUpdate(receivedCommand))
+//     numbers.forEach(function(number) {
+//     console.log(number);
+// });
 
 end
 
