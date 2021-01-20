@@ -1,4 +1,3 @@
-#!/home/openhabian/.virtualenvs/virtual_OH/bin/python
 # -----------------------------
 #   USAGE
 # -----------------------------
@@ -14,21 +13,11 @@
 # Author: Bryan Laygond
 # Website: http://www.laygond.com
 #
-# NOTE:
-# I turn on virtual environments from script. Remove shebang line on top
-# and "Turn on virtual environment from script" section if not needed.
-#
 # COPYRIGHT:
 # Code may only be distributed through http://www.laygond.com any other methods
 # of obtaining or distributing are prohibited
 # Copyright (c) 2020-2021
 # ------------------------------
-
-# Turn on virtual environment from script (optional) 
-activate_this = "/home/openhabian/.virtualenvs/virtual_OH/bin/activate_this.py"
-with open(activate_this) as f:
-    code = compile(f.read(), activate_this, 'exec')
-    exec(code, dict(__file__=activate_this))
 
 # Import the necessary packages
 import csv
@@ -51,11 +40,13 @@ cvs_path = os.path.join(dir_path,'groupData.csv')
 df = pd.read_csv(cvs_path)
 index_row = df.index[df['PisoOficina'].str.contains(args["input"], na=False)]
 
-# Toggle Active Status column on csv
+# Toggle Active column on csv
 if args["switch"] == 'ON':
     df.loc[index_row,'Active'] = True
+    df.to_csv(cvs_path, index=False)
 if args["switch"] == 'OFF':
     df.loc[index_row,'Active'] = False
+    df.to_csv(cvs_path, index=False)
 
 # Print if Group owner has more floor&offices
 floorOffices = df.loc[index_row,'PisoOficina'].values[0]
@@ -64,8 +55,6 @@ if len(floorOffices) > 4: # then it has more
     floorOffices.remove(args["input"])
     print(",".join([elem for elem in floorOffices]))
 
-# Update csv file 
-df.to_csv(cvs_path, index=False)
 
 # TODO:
 # Reading as list and then converting seems faster
