@@ -5,7 +5,7 @@
 #
 # DESCRIPTION:
 # Reads continously UUID from NFC tags: cards, phones, etc
-# Checks if a tag is registered in the database and active.
+# Checks if a tag is registered in the group database and active.
 # If tag is active then activate elevator cabin.
 # Also, if tag is a phone then push NDEF data to a website. 
 #

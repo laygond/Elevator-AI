@@ -21,10 +21,11 @@
 
 # Import the necessary packages
 import csv
-import pandas as pd
+from tempfile import NamedTemporaryFile
+import shutil
 import time
 import argparse
-import os 
+import os, sys 
 
 # Construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -34,40 +35,32 @@ ap.add_argument("-s", "--switch", type=str, default="",
 	help=" Switch State")
 args = vars(ap.parse_args())
 
-# Read csv and find row of Floor&Office
+# Initiate csv reader and writer
 dir_path = os.path.dirname(os.path.realpath(__file__))
-cvs_path = os.path.join(dir_path,'groupData.csv')
-df = pd.read_csv(cvs_path)
-index_row = df.index[df['PisoOficina'].str.contains(args["input"], na=False)]
+csv_path = os.path.join(dir_path,'groupData.csv')
+f = open(csv_path)
+reader = csv.DictReader(f)
+tempfile = NamedTemporaryFile(mode='w', delete=False)
+writer = csv.DictWriter(tempfile, fieldnames=reader.fieldnames)
 
-# Toggle Active column on csv
-if args["switch"] == 'ON':
-    df.loc[index_row,'Active'] = True
-    df.to_csv(cvs_path, index=False)
-if args["switch"] == 'OFF':
-    df.loc[index_row,'Active'] = False
-    df.to_csv(cvs_path, index=False)
+# Read and Write per row
+writer.writeheader()
+for row in reader:
+    # Find row of Floor&Office
+    if args["input"] in row["PisoOficina"]:
+        # Print if Group owner has more floor&offices
+        floorOffices = row['PisoOficina']
+        if len(floorOffices) > 4: # then it has more 
+            floorOffices = floorOffices.split(',')
+            floorOffices.remove(args["input"])
+            print(",".join([elem for elem in floorOffices]))
+        # Toggle Active column on csv
+        if args["switch"] == 'ON':
+            row["Active"] = True               
+        if args["switch"] == 'OFF':
+            row["Active"] = False 
+    # Write row
+    writer.writerow(row)
 
-# Print if Group owner has more floor&offices
-floorOffices = df.loc[index_row,'PisoOficina'].values[0]
-if len(floorOffices) > 4: # then it has more 
-    floorOffices = floorOffices.split(',')
-    floorOffices.remove(args["input"])
-    print(",".join([elem for elem in floorOffices]))
-
-
-# TODO:
-# Reading as list and then converting seems faster
-# * try  a pure a list solution
-# * try csv.DictReader too
-# https://stackoverflow.com/questions/11033590/change-specific-value-in-csv-file-via-python
-# 
-# start  = time.time()
-# with open('groupData.csv','r') as dest_f:
-#     data_iter = csv.reader(dest_f,
-#                            delimiter = ',',
-#                            quotechar = '"')
-#     data = [data for data in data_iter]
-#     df = pd.DataFrame(data)
-#     print(df)
-# print("[INFO] set took:", time.time()-start) 
+# Rewrite csv once done with changes
+shutil.move(tempfile.name, csv_path)
