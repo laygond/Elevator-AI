@@ -71,10 +71,10 @@ end
 
 rule "LED Controller"
 when
-    Item LEDColorStr received command
+    Item LEDColorStr changed
 then
     createTimer(now.plusSeconds(1), [ |
         LEDColorStr.postUpdate("0;0;0")
     ])
-    logInfo("LED Color was ", receivedCommand.toString )
+    logInfo("LED Color was ", "receivechange" )
 end
