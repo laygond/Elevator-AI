@@ -34,9 +34,15 @@ import threading
 import binascii
 import time
 import os
+import paho.mqtt.client as mqtt 
 
 # Website that will be pushed to phone when tapped
 phone_website = "https://www.instagram.com/laygond/"
+
+# MQTT Setup
+mqttBroker ="192.168.0.205" 
+client = mqtt.Client("PythonMQTT")
+client.connect(mqttBroker)
 
 # Verify Reader is available
 clf = nfc.ContactlessFrontend()
@@ -81,13 +87,13 @@ while True:
                 print(row)
                 if row["Active"] == 'True':
                     print("[INFO] TRUE BABY")
-                    #Welcome row["User"], led green, activate button panel
+                    client.publish("elevator/control/led", "0;100;0") #Green light
                     f.seek(0)
                     break
                 else:
-                    print("[INFO] FALSE BABY")  
+                    print("[INFO] FALSE BABY")    
+                    client.publish("elevator/control/led", "100;0;0") #RED light
                     f.seek(0)
-                    #led red
                     break
         
         # Push website to phone otherwise end attempt
