@@ -64,11 +64,9 @@ def llcp_connected(llc):
     return True    # False returns llc object to be handled
                 # True otherwise
 
-# Read csv uuid database and active group
+# Set csv path point to active group
 dir_path = os.path.dirname(os.path.realpath(__file__))
 csv_path = os.path.join(dir_path,'groupData.csv')
-f = open(csv_path)
-data = csv.DictReader(f)
 
 # Read NFC tag when tapped (preferred method)
 tag  = clf.connect(rdwr={'on-connect': lambda tag: False})
@@ -81,7 +79,9 @@ while True:
         tag  = clf.connect(rdwr={'on-connect': lambda tag: False})
         uuid = str(binascii.hexlify(tag.identifier).decode())
 
-        # Check tag against data 
+        # Check tag against data
+        f = open(csv_path)
+        data = csv.DictReader(f) 
         for row in data:
             if uuid in row['UUID']:
                 print(row)
