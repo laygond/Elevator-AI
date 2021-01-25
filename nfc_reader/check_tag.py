@@ -87,11 +87,13 @@ while True:
                 print(row)
                 if row["Active"] == 'True':
                     print("[INFO] TRUE BABY")
-                    client.publish("elevator/control/led", "0;100;0") #Green light
+                    client.reconnect() # in case broker disconnects
+                    client.publish("elevator/control/led", "0;100;0") #GREEN light
                     f.seek(0)
                     break
                 else:
-                    print("[INFO] FALSE BABY")    
+                    print("[INFO] FALSE BABY") 
+                    client.reconnect() # in case broker disconnects   
                     client.publish("elevator/control/led", "100;0;0") #RED light
                     f.seek(0)
                     break
