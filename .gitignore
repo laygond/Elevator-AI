@@ -3,3 +3,4 @@ sample.mp4
 nfc_reader/read_copy.py
 nfc_reader/read_pc_delayed.py
 nfc_reader/read_pc_faster.py
+nfc_reader/mqtt_demo.py

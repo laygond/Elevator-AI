@@ -1,12 +1,18 @@
-rule "ON Startup"
+rule "ON Startup: Initialize Floor Switches"
 when
     System started
 then
     createTimer(now.plusSeconds(10), [|
         var String results = ""
-        logInfo("startupRule", "Before")
-        results = executeCommandLine("source /home/openhabian/Elevator-AI/on_startup/virtualEnvActivate.sh", 5000)
-        logInfo("startupRule", "Results are: " + results)
+        results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/show_active_switches.py", 5000)
+        if (results != "")
+        {
+            logInfo("startupRule", "Initializing Floor Switches")
+            for (String i : results.split(","))
+            {
+                postUpdate(i,ON)
+            }
+        }
     ])
 end
 
@@ -69,7 +75,7 @@ then
 end
 
 
-rule "LED Controller"
+rule "LED Controller: Turn off"
 when
     Item LEDColorStr changed
 then
