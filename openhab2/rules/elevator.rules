@@ -74,7 +74,7 @@ when
     Item LEDColorStr changed
 then
     createTimer(now.plusSeconds(1), [ |
-        LEDColorStr.postUpdate("0;0;0")
+        LEDColorStr.sendCommand("0;0;0")
     ])
     logInfo("LED Color was ", "receivechange" )
 end
