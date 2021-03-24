@@ -1,0 +1,16 @@
+[Unit]
+Description=Start NFC Reader Daemon
+After=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/openhabian/Elevator-AI/nfc_reader/check_tag.py
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+RestartSec=10s
+KillMode=process
+TimeoutSec=infinity
+User=openhabian
+
+[Install]
+WantedBy=multi-user.target
