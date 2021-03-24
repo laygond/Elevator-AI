@@ -19,6 +19,8 @@ sitemap elevator label="Laygond-AI"
     Frame label="NFC Tags"
     {
         Group item=PisosYOficinas 
+        Text  item=NFCLastID
+        Text  item=NFCTagID 
 	    // Frame label="Activar/Desactivar"
         // {
         //     Switch item=P1O1
