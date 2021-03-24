@@ -42,10 +42,12 @@ import RPi.GPIO as GPIO
 
 # Relay Setup to enable elevator button panel
 relay_started = time.time()         # keep track of time when relay on
-GPIO.setmode(GPIO.BCM)              # GPIO Numbers instead of board numbers
+GPIO.setmode(GPIO.BCM)              # GPIO Numbers instead of board pin numbers
 RELAY_GPIO = 17
-GPIO.setup(RELAY_GPIO, GPIO.OUT)    
-GPIO.output(RELAY_GPIO, GPIO.LOW)   # Start with relay off
+GPIO_ON  = 0                        # Since my relay is active low
+GPIO_OFF = 1
+GPIO.setup(RELAY_GPIO, GPIO.OUT)    # Set pin as output
+GPIO.output(RELAY_GPIO, GPIO_OFF)   # Start with relay off
 
 # Website that will be pushed to phone when tapped
 phone_website = "https://condominioimbabura.github.io/"
@@ -104,7 +106,7 @@ while True:
                     #print("[INFO] TRUE BABY")
                     client.reconnect() # in case broker disconnects
                     client.publish("elevator/control/led", "0;100;0") #GREEN light 
-                    GPIO.output(RELAY_GPIO, GPIO.HIGH) #Enable Button Panel and track time
+                    GPIO.output(RELAY_GPIO, GPIO_ON) #Enable Button Panel and track time
                     relay_started = time.time()
                     f.seek(0)
                     break
@@ -122,10 +124,10 @@ while True:
         clf.connect(llcp={'on-connect':llcp_connected, 'lto':250, 'role':'initiator'}, terminate=immediately) 
         #print("done pushing")
 
-        # Disable Button Pannel after 3 seconds (Set Relay off)
-        while(time.time() - relay_started < 3): pass      # hold time for 3 seconds
-        GPIO.output(RELAY_GPIO, GPIO.LOW) 
-        
+        # Disable Button Pannel after 3.5 seconds (Set Relay off)
+        while(time.time() - relay_started < 3.5): pass      # hold time for t seconds
+        GPIO.output(RELAY_GPIO, GPIO_OFF) 
+
     except:
         pass
 
