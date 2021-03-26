@@ -18,8 +18,10 @@ sitemap elevator label="Laygond-AI"
 
     Frame label="NFC Tags"
     {
-        Group item=PisosYOficinas 
-        Text  item=NFCTagID 
+        Group item=PisosYOficinas  
+        Group item=NFCTagID {
+            Selection item=LR_TV_Channel label="TV Channel" mappings=[0="DasErste", 1="BBC One", 2="Cartoon Network"]
+        }
 	    // Frame label="Activar/Desactivar"
         // {
         //     Switch item=P1O1
