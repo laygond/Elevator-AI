@@ -60,7 +60,7 @@ client.connect(mqttBroker)
 # Verify Reader is available
 clf = nfc.ContactlessFrontend()
 sony_RCS380 = 'usb:054c:06c1'       # Product and Vendor ID
-#print("[INFO] Usb NFC Reader Connected: ", clf.open(sony_RCS380))
+print("[INFO] Usb NFC Reader Connected: ", clf.open(sony_RCS380))  # never comment out
 
 # Callback functions to push website if NFC tag is a phone
 def send_ndef_message(llc):
@@ -124,8 +124,8 @@ while True:
         clf.connect(llcp={'on-connect':llcp_connected, 'lto':250, 'role':'initiator'}, terminate=immediately) 
         #print("done pushing")
 
-        # Disable Button Pannel after 3.5 seconds (Set Relay off)
-        while(time.time() - relay_started < 3.5): pass      # hold time for t seconds
+        # Disable Button Pannel after 3 seconds (Set Relay off)
+        while(time.time() - relay_started < 3): pass      # hold time for t seconds
         GPIO.output(RELAY_GPIO, GPIO_OFF) 
 
     except:
