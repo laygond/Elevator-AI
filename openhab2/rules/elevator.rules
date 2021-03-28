@@ -58,19 +58,67 @@ then
 end
 
 
-rule "Pisos Y Oficinas"
+rule "Activate Pisos Y Oficinas"
 when
     Member of PisosYOficinas received command
 then
     var String results = ""
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/activate_panda.py --input " + triggeringItem.name + " --switch " + receivedCommand, 4000)
-    logInfo("execRule", "Results are: " + results)
+    logInfo("exec activate_panda.py", "Results are: " + results)
     if (results != "")
     {
         for (String i : results.split(","))
         {
             postUpdate(i,receivedCommand.toString)
         }
+    }
+end
+
+rule "NFC Tag ID: Search, Add, Delete"
+when
+    Item OptionInputNFC received command
+then 
+    if (receivedCommand.toString == "0") // Ver (Look) -------------------------------
+    {    
+        if (PisoNFC !=== null && OficinaNFC !=== null) //not initialized yet
+        {
+            var String results = ""
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/ver.py --input P"+PisoNFC+"O"+OficinaNFC, 4000)
+            logInfo("exec ver.py", "Results are: " + results)
+            if (results != "") { OptionOutputNFC.postUpdate(results) }
+        }
+        else
+        {
+            OptionOutputNFC.postUpdate("Debes elegir piso y oficina")
+        }        
+    }
+    if (receivedCommand.toString == "1") // Agregar (Add)-----------------------------
+    {        
+        if (PisoNFC !=== null && OficinaNFC !=== null && NFCTagID !=== null) //not initialized yet
+        {
+            var String results = ""
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/agregar.py --input P"+PisoNFC+"O"+OficinaNFC+" --uuid "+NFCTagID, 4000)
+            logInfo("exec agregar.py", "Results are: " + results)
+            if (results != "") { OptionOutputNFC.postUpdate(results) }
+        }
+        else
+        {
+            OptionOutputNFC.postUpdate("Escanea un dispositivo o tarjeta y luego elige piso y oficina")
+        }       
+    }
+    if (receivedCommand.toString == "2") // Borrar (Delete)----------------------------
+    {       
+        if (PisoNFC !=== null && OficinaNFC !=== null && NFCTagID !=== null) //not initialized yet
+        {
+            var String results = ""
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/borrar.py --input P"+PisoNFC+"O"+OficinaNFC+" --uuid "+NFCTagID, 4000)
+            logInfo("exec borrar.py", "Results are: " + results)
+            if (results != "") { OptionOutputNFC.postUpdate(results) }
+        }
+        else
+        {
+            OptionOutputNFC.postUpdate("Escanea un dispositivo o tarjeta y luego elige piso y oficina")
+        }      
     }
 end
 

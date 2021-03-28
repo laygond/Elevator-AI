@@ -23,7 +23,7 @@ sitemap elevator label="Laygond-AI"
             Selection item=PisoNFC mappings=[1="1",2="2",3="3",4="4",5="5",6="6",7="7",8="8",9="9"]
             Selection item=OficinaNFC mappings=[1="1",2="2",3="3",4="4",5="5"]
             Switch    item=OptionInputNFC mappings=[0="Ver", 1="Agregar", 2="Borrar"]
-            Text      item=OptionOutputNFC
+            Webview   icon=none url="http://192.168.0.205:8080/rest/items/OptionOutputNFC/state" height=15
         }
 	    // Frame label="Activar/Desactivar"
         // {

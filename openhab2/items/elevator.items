@@ -17,10 +17,10 @@ Switch   PowerNet      "Switch [MAP(network.map):%s]"	        <network> 	{channe
 
 // NFC       
 Group   NFCTagID        "Last ID: [%s]"        <keyring>     {channel="mqtt:topic:SONY-NFCTagID:nfc_ch"}
-String  PisoNFC         "Piso:"                <NULL>
-String  OficinaNFC      "Oficina:"             <NULL>
+String  PisoNFC         "PISO:"                <NULL>
+String  OficinaNFC      "OFICINA:"             <NULL>
 String  OptionInputNFC  ""                     <NULL>
-String  OptionOutputNFC "[%s]"                 <NULL>        {channel="mqtt:topic:SONY-NFCTagID:nfc_ch"}
+String  OptionOutputNFC ""                     <NULL>
 Group  PisosYOficinas "Activar" <lightning>
 Switch P1O1 "OF. 1"  <1>   (PisosYOficinas)
 Switch P1O2 "OF. 2" <NULL> (PisosYOficinas)
