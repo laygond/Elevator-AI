@@ -74,18 +74,23 @@ then
     }
 end
 
+
 rule "NFC Tag ID: Search, Add, Delete"
 when
     Item OptionInputNFC received command
 then 
     if (receivedCommand.toString == "0") // Ver (Look) -------------------------------
-    {    
-        if (PisoNFC !=== null && OficinaNFC !=== null) //not initialized yet
+    {   
+        if (PisoNFC.state != NULL && OficinaNFC.state != NULL) //not initialized yet
         {
             var String results = ""
-            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/ver.py --input P"+PisoNFC+"O"+OficinaNFC, 4000)
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/ver.py --input P"+PisoNFC.state+"O"+OficinaNFC.state, 4000)
             logInfo("exec ver.py", "Results are: " + results)
-            if (results != "") { OptionOutputNFC.postUpdate(results) }
+            if (results != "") 
+            { 
+                OptionOutputNFC.postUpdate(results)
+                OptionOutputNFC.sendCommand(REFRESH) //Speeds up process a bit
+            }
         }
         else
         {
@@ -94,10 +99,11 @@ then
     }
     if (receivedCommand.toString == "1") // Agregar (Add)-----------------------------
     {        
-        if (PisoNFC !=== null && OficinaNFC !=== null && NFCTagID !=== null) //not initialized yet
+        if (PisoNFC.state != NULL && OficinaNFC.state != NULL && NFCTagID.state != NULL) //not initialized yet
         {
+            OptionOutputNFC.postUpdate("PROCESANDO...")
             var String results = ""
-            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/agregar.py --input P"+PisoNFC+"O"+OficinaNFC+" --uuid "+NFCTagID, 4000)
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/agregar.py --input P"+PisoNFC.state+"O"+OficinaNFC.state+" --uuid "+NFCTagID.state, 4000)
             logInfo("exec agregar.py", "Results are: " + results)
             if (results != "") { OptionOutputNFC.postUpdate(results) }
         }
@@ -108,10 +114,11 @@ then
     }
     if (receivedCommand.toString == "2") // Borrar (Delete)----------------------------
     {       
-        if (PisoNFC !=== null && OficinaNFC !=== null && NFCTagID !=== null) //not initialized yet
+        if (PisoNFC.state != NULL && OficinaNFC.state != NULL && NFCTagID.state != NULL) //not initialized yet
         {
+            OptionOutputNFC.postUpdate("PROCESANDO...")
             var String results = ""
-            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/borrar.py --input P"+PisoNFC+"O"+OficinaNFC+" --uuid "+NFCTagID, 4000)
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/borrar.py --input P"+PisoNFC.state+"O"+OficinaNFC.state+" --uuid "+NFCTagID.state, 4000)
             logInfo("exec borrar.py", "Results are: " + results)
             if (results != "") { OptionOutputNFC.postUpdate(results) }
         }
