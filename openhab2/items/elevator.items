@@ -15,8 +15,9 @@ Switch  SwitchAdapter  "Switch Adapter"                  <NULL>     {channel="mq
 Contact  MotionSensor  "Personas [MAP(motion_contact.map):%s]"	<movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
 Switch   PowerNet      "Switch [MAP(network.map):%s]"	        <network> 	{channel="network:pingdevice:192_168_0_164:online"}
 
-// NFC       
-Group   NFCTagID        "Last ID: [%s]"        <keyring>     {channel="mqtt:topic:SONY-NFCTagID:nfc_ch"}
+// NFC
+Group   RegistrarGroup  "Registrar"            <keyring>
+String  NFCTagID        "UUID: [%s]"           <keyring>     {channel="mqtt:topic:SONY-NFCTagID:nfc_ch"}
 String  PisoNFC         "PISO:"                <NULL>
 String  OficinaNFC      "OFICINA:"             <NULL>
 String  OptionInputNFC  ""                     <NULL>

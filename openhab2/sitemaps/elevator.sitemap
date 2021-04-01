@@ -19,7 +19,8 @@ sitemap elevator label="Laygond-AI"
     Frame label="NFC Tags"
     {
         Group item=PisosYOficinas  
-        Group item=NFCTagID {
+        Group item=RegistrarGroup {
+            Text      item=NFCTagID
             Selection item=PisoNFC mappings=[1="1",2="2",3="3",4="4",5="5",6="6",7="7",8="8",9="9"]
             Selection item=OficinaNFC mappings=[1="1",2="2",3="3",4="4",5="5"]
             Switch    item=OptionInputNFC mappings=[0="Ver", 1="Agregar", 2="Borrar"]
