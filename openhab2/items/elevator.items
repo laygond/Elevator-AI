@@ -15,6 +15,20 @@ Switch  SwitchAdapter  "Switch Adapter"                  <NULL>     {channel="mq
 Contact  MotionSensor  "Personas [MAP(motion_contact.map):%s]"	<movement> 	{channel="mqtt:topic:LAI-MotionSensor:motion_ch"}
 Switch   PowerNet      "Switch [MAP(network.map):%s]"	        <network> 	{channel="network:pingdevice:192_168_0_164:online"}
 
+//Botonera
+Contact  BPB           "Boton Planta Baja"     <NULL>       {channel="mqtt:topic:LAI-Botonera:BPB_ch"}
+Contact  B1            "Boton 1"               <NULL>       {channel="mqtt:topic:LAI-Botonera:B1_ch"}
+Contact  B2            "Boton 2"               <NULL>       
+Switch   B3            "Boton 3"               <NULL>       {channel="mqtt:topic:LAI-Botonera:B3_ch"}
+Switch   B4            "Boton 4"               <NULL> 
+Switch   B5            "Boton 5"               <NULL> 
+Switch   B6            "Boton 6"               <NULL> 
+Switch   B7            "Boton 7"               <NULL> 
+Switch   B8            "Boton 8"               <NULL> 
+Switch   B9            "Boton 9"               <NULL> 
+Switch   BAlarma       "Boton Alarma"          <NULL> 
+Switch   BDetener      "Boton Detener"         <NULL> 
+
 // NFC
 Group   RegistrarGroup  "Registrar"            <keyring>
 String  NFCTagID        "UUID: [%s]"           <keyring>     {channel="mqtt:topic:SONY-NFCTagID:nfc_ch"}

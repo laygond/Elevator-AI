@@ -139,3 +139,23 @@ then
     ])
     logInfo("LED Color was ", "receivechange" )
 end
+
+
+rule "Botonera Contact B2"
+when
+    Item B2 received command OPEN
+then 
+    var String results = ""
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
+    logInfo("exec presionar_boton.py", "Results are: " + results)
+end
+
+
+rule "Botonera Switch B4"
+when
+    Item B4 received command ON
+then 
+    var String results = ""
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
+    logInfo("exec presionar_boton.py", "Results are: " + results)
+end
