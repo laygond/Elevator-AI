@@ -130,32 +130,34 @@ then
 end
 
 
-rule "LED Controller: Turn off"
+rule "Botonera Single Press"
 when
-    Item LEDColorStr changed
-then
-    createTimer(now.plusMillis(500), [ |
-        LEDColorStr.sendCommand("0;0;0")
-    ])
-    logInfo("LED Color was ", "receivechange" )
+    Member of Botones received command ON
+then 
+    if (BDetener.state != ON)
+    {
+        var String results = ""
+        results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
+        logInfo("exec presionar_boton.py", "Results are: " + results)
+    }
 end
 
-
-rule "Botonera Contact B2"
+rule "Botonera Long Press BAlarma"
 when
-    Item B2 received command OPEN
+    Item BAlarma received command ON
 then 
     var String results = ""
     results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
     logInfo("exec presionar_boton.py", "Results are: " + results)
+    BAlarma.sendCommand(OFF)
 end
 
-
-rule "Botonera Switch B4"
+rule "Botonera two state press BDetener"
 when
-    Item B4 received command ON
+    Item BDetener received command
 then 
     var String results = ""
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name + " --switch " + receivedCommand, 4000)
     logInfo("exec presionar_boton.py", "Results are: " + results)
 end
+
