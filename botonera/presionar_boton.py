@@ -144,7 +144,14 @@ if args["input"] == 'BDetener':
     if args["switch"] == 'ON':
         press(RELAY_PIN['BDetener']) 
     if args["switch"] == 'OFF':
-        press(RELAY_PIN['BPB'])    # Send back to Lobby (Can be any button to make it move)
-
+        GPIO.setup(RELAY_PIN['BPB'], GPIO.OUT)
+	GPIO.output(RELAY_PIN['BPB'], GPIO_OFF)
+	press(RELAY_PIN['BPB'])    # Send back to Lobby (Can be any button to make it move)
+	GPIO.setup(RELAY_PIN['BPB'], GPIO.IN)
+	
 if args["input"] == 'BAlarma':
     long_press(RELAY_PIN['BAlarma'])          
+
+# Set GPIO pin back to default
+GPIO.setup(RELAY_PIN[args['input']], GPIO.IN)    # Set pin as input
+
