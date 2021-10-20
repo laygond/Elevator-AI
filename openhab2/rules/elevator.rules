@@ -147,7 +147,7 @@ when
     Item BAlarma received command ON
 then 
     var String results = ""
-    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 4000)
+    results = executeCommandLine("python3 /home/openhabian/Elevator-AI/botonera/presionar_boton.py --input " + triggeringItem.name, 8000)
     logInfo("exec presionar_boton.py", "Results are: " + results)
     BAlarma.sendCommand(OFF)
 end

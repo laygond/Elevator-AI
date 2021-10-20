@@ -37,6 +37,7 @@ args = vars(ap.parse_args())
 
 # Relay Setup to enable elevator button panel
 GPIO.setmode(GPIO.BCM)         # GPIO Numbers instead of board pin numbers
+GPIO.setwarnings(False)        # In case  pin is set to output twice
 GPIO_ON  = 0                   # Since my relay is active low
 GPIO_OFF = 1
 RELAY_PIN = {
@@ -55,8 +56,12 @@ RELAY_PIN = {
 GPIO.setup(RELAY_PIN[args['input']], GPIO.OUT)    # Set pin as output     
 GPIO.output(RELAY_PIN[args['input']], GPIO_OFF)   # Start with relay off
 
+# Path to pickle file
+dir_path    = os.path.dirname(os.path.realpath(__file__))
+pickle_path = os.path.join(dir_path,'enable')
+
 # Get permission results from tap-tag verification
-p = open('enable','rb')
+p = open(pickle_path,'rb')
 botonera_enabled_through_tag = pickle.load(p)
 p.close()
 
@@ -84,7 +89,7 @@ def long_press(GPIO_pin):
 
 def disable_button_panel():
     botonera_enabled_through_tag = False
-    p = open('enable','wb')
+    p = open(pickle_path,'wb')
     pickle.dump(botonera_enabled_through_tag,p)
     p.close()
 
@@ -148,6 +153,7 @@ if args["input"] == 'BDetener':
         GPIO.output(RELAY_PIN['BPB'], GPIO_OFF)
         press(RELAY_PIN['BPB'])    # Send back to Lobby (Can be any button to make it move)
         GPIO.setup(RELAY_PIN['BPB'], GPIO.IN)
+        disable_button_panel()  
 	
 if args["input"] == 'BAlarma':
     long_press(RELAY_PIN['BAlarma'])          
