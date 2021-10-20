@@ -18,9 +18,9 @@ from time import sleep
 
 # LED Strip Setup
 GPIO.setmode(GPIO.BCM)             # GPIO Numbers instead of board pin numbers
-LED_R_GPIO = 5                     # Red pin
-LED_G_GPIO = 5                     # Green pin
-LED_B_GPIO = 5                     # Blue pin
+LED_R_GPIO = 2                     # Red pin
+LED_G_GPIO = 3                     # Green pin
+LED_B_GPIO = 4                     # Blue pin
 GPIO.setup(LED_R_GPIO, GPIO.OUT)   # Set pin as output
 GPIO.setup(LED_G_GPIO, GPIO.OUT)    
 GPIO.setup(LED_B_GPIO, GPIO.OUT)    
@@ -42,9 +42,9 @@ try:
     if len(args["rgb"].split(',')) == 3:
         rgb = [int(float(c)/255*100) for c in args["rgb"].split(',')]
         print("[INFO] In percentage (0-100)% RGB: ", rgb)
-        r.ChangeDutyCycle(rgb(0))
-        g.ChangeDutyCycle(rgb(1))
-        b.ChangeDutyCycle(rgb(2))
+        r.ChangeDutyCycle(rgb[0])
+        g.ChangeDutyCycle(rgb[1])
+        b.ChangeDutyCycle(rgb[2])
         sleep(0.01)
 except:
     print("[ERROR] RGB format should be like --rgb 0,50,255")
