@@ -57,61 +57,40 @@ r.start(0)
 g.start(0)
 b.start(0)
 
-# Website that will be pushed to phone when tapped
-phone_website = "https://condominioimbabura.github.io/"
-
 # MQTT Setup
 mqttBroker ="192.168.0.205" 
 client = mqtt.Client("PyMQ")
 client.connect(mqttBroker)
 
-# Verify Reader is available
-clf = nfc.ContactlessFrontend()
-sony_RCS380 = 'usb:054c:06c1'       # Product and Vendor ID
-print("[INFO] Usb NFC Reader Connected: ", clf.open(sony_RCS380))  # never comment out
-
-# Callback functions to push website if NFC tag is a phone
-def send_ndef_message(llc):
-    # this stage is only reached after a successful llc connection
-    snep = nfc.snep.SnepClient(llc)
-    snep.put_records([ndef.UriRecord(phone_website)])
-    
-def immediately():
-    global phone_started
-    return time.time() - phone_started > .5
-
-def llcp_connected(llc):
-    threading.Thread(target=send_ndef_message, args=(llc,)).start()
-    return True     # False returns llc object to be handled
-                    # True otherwise
-
+# Set path to files 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+csv_path = os.path.join(dir_path,'groupData.csv')
+pickle_path  = os.path.join(dir_path,'../botonera/enable')
 
 # Callback to turn on and off LED Strip
 def led_signal(channel):
     channel.ChangeDutyCycle(100)
-    time.sleep(.8)
+    time.sleep(.6)
     channel.ChangeDutyCycle(0)
 
+# Global Timer variable that reintializes with every tap
+button_panel_timer = 0
 
-# Set csv path point to active group and pickle path to enable 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-csv_path = os.path.join(dir_path,'groupData.csv')
-pickle_path = os.path.join(dir_path,'../botonera/enable')
+# Callback to Disable Button Pannel after 5 seconds from latest tap
+def disable_button_panel():
+    local_timer_start = time.time()
+    while(time.time() - local_timer_start < 5): pass      # hold time for t seconds
+    if time.time() - button_panel_timer > 5:
+        #print("[INFO] ", time.strftime("%H %M %S",time.localtime()))  
+        p = open(pickle_path,'wb')
+        botonera_enabled_through_tag = False
+        pickle.dump(botonera_enabled_through_tag,p)
+        p.close()
 
-# Callback to Disable Button Pannel after 5 seconds 
-# (Set enable pickle file to false)
-def disable_button_panel(time_since_enable_started):
-    while(time.time() - time_since_enable_started < 5): pass      # hold time for t seconds
-    print(time.strftime("%H %M %S",time.localtime()))
-    # p = open(pickle_path,'rwb')
-    # botonera_enabled_through_tag = pickle.load(p)
-    # if botonera_enabled_through_tag:
-    #     botonera_enabled_through_tag = False
-    #     pickle.dump(botonera_enabled_through_tag,p)
-    # p.close()
-
-
-# Read NFC tag when tapped (preferred method) (first instances of variables)
+# Setup NFC Reader and Read NFC tag when tapped
+clf = nfc.ContactlessFrontend()
+sony_RCS380 = 'usb:054c:06c1'       # Product and Vendor ID
+print("[INFO] Usb NFC Reader Connected: ", clf.open(sony_RCS380))  # never comment out
 tag  = clf.connect(rdwr={'on-connect': lambda tag: False})
 uuid = str(binascii.hexlify(tag.identifier).decode()) 
             
@@ -139,32 +118,26 @@ while True:
                     botonera_enabled_through_tag= True
                     pickle.dump(botonera_enabled_through_tag, p)
                     p.close()
-
-                    # Track time and disable Button Pannel after 5 seconds
-                    threading.Thread(target=disable_button_panel, args=(time.time(),)).start()
-
+                    
                     # GREEN light
                     threading.Thread(target=led_signal, args=[g]).start() 
                     
                     # Reset file pointer
-                    f.seek(0)
+                    f.seek(0)           
+                    
+                    # Keep Track of time if no button is pressed: disable Button Pannel in 5 seconds
+                    button_panel_timer= time.time()     # Reset time with every active tag
+                    threading.Thread(target=disable_button_panel).start()                    
                     break
+
                 else:
                     print("[INFO]=== PAY YOUR BILLS BABY ===")    
                     # RED light
-                    threading.Thread(target=led_signal, args=(r,)).start()
+                    threading.Thread(target=led_signal, args=[r]).start()
 
                     # Reset file pointer
                     f.seek(0)
                     break
-        
-        # Push website to phone otherwise end attempt
-        global phone_started
-        phone_started = time.time()
-        #print("about to push")
-        clf.connect(llcp={'on-connect':llcp_connected, 'lto':250, 'role':'initiator'}, terminate=immediately) 
-        #print("done pushing")
-  
     except:
         pass
 
