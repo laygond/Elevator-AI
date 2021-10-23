@@ -80,8 +80,7 @@ button_panel_timer = 0
 def disable_button_panel():
     local_timer_start = time.time()
     while(time.time() - local_timer_start < 5): pass      # hold time for t seconds
-    if time.time() - button_panel_timer > 5:
-        #print("[INFO] ", time.strftime("%H %M %S",time.localtime()))  
+    if time.time() - button_panel_timer > 5: 
         p = open(pickle_path,'wb')
         botonera_enabled_through_tag = False
         pickle.dump(botonera_enabled_through_tag,p)
@@ -112,15 +111,15 @@ while True:
             if uuid in row['UUID']:
                 #print(row)
                 if row["Active"] == 'True':
-                    print("[INFO]=== TAG IS ACTIVE ===")                    
+                    #print("[INFO]=== TAG IS ACTIVE ===")                    
+                    # GREEN light
+                    threading.Thread(target=led_signal, args=[g]).start()
+
                     # Enable Button Panel
                     p = open(pickle_path,'wb')
                     botonera_enabled_through_tag= True
                     pickle.dump(botonera_enabled_through_tag, p)
                     p.close()
-                    
-                    # GREEN light
-                    threading.Thread(target=led_signal, args=[g]).start() 
                     
                     # Reset file pointer
                     f.seek(0)           
@@ -131,7 +130,7 @@ while True:
                     break
 
                 else:
-                    print("[INFO]=== PAY YOUR BILLS BABY ===")    
+                    #print("[INFO]=== PAY YOUR BILLS BABY ===")    
                     # RED light
                     threading.Thread(target=led_signal, args=[r]).start()
 
