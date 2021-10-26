@@ -28,6 +28,7 @@
 # HARDWARE (Modify to your needs):
 # - Sony RC-S380            https://www.sony.net/Products/felica/business/tech-support/
 # - Card NTAG215 type 2     https://www.nxp.com/docs/en/data-sheet/NTAG213_215_216.pdf
+# - L298N as LED driver     https://sudonull.com/post/111051-RGB-tape-control-with-Arduino-and-L298N-driver
 # ------------------------------
 
 # Import the necessary packages
@@ -53,9 +54,9 @@ GPIO.setup(LED_B_GPIO, GPIO.OUT)
 r = GPIO.PWM(LED_R_GPIO, 100)      # PWM from 0-100
 g = GPIO.PWM(LED_G_GPIO, 100)
 b = GPIO.PWM(LED_B_GPIO, 100)
-r.start(0)
-g.start(0)
-b.start(0)
+r.start(100)                       # Active Low setup since L298N
+g.start(100)
+b.start(100)
 
 # MQTT Setup
 mqttBroker ="192.168.0.205" 
@@ -69,9 +70,9 @@ pickle_path  = os.path.join(dir_path,'../botonera/enable')
 
 # Callback to turn on and off LED Strip
 def led_signal(channel):
-    channel.ChangeDutyCycle(100)
-    time.sleep(.6)
     channel.ChangeDutyCycle(0)
+    time.sleep(.6)
+    channel.ChangeDutyCycle(100)
 
 # Global Timer variable that reintializes with every tap
 button_panel_timer = 0
@@ -106,10 +107,12 @@ while True:
 
         # Check tag against data
         f = open(csv_path)
-        data = csv.DictReader(f) 
+        data = csv.DictReader(f)
+        tag_found = False 
         for row in data:
             if uuid in row['UUID']:
                 #print(row)
+                tag_found = True
                 if row["Active"] == 'True':
                     #print("[INFO]=== TAG IS ACTIVE ===")                    
                     # GREEN light
@@ -138,8 +141,9 @@ while True:
                     f.seek(0)
                     break
 
-        # BLUE light: New Tag has been scanned        
-        threading.Thread(target=led_signal, args=[b]).start()
+        # BLUE light: New Tag has been scanned
+        if not tag_found:        
+            threading.Thread(target=led_signal, args=[b]).start()
     except:
         pass
 
