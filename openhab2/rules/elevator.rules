@@ -81,20 +81,31 @@ when
 then 
     if (receivedCommand.toString == "0") // Ver (Look) -------------------------------
     {   
+        var String argPart1 = ""
         if (PisoNFC.state != NULL && OficinaNFC.state != NULL) //not initialized yet
         {
-            var String results = ""
-            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/ver.py --input P"+PisoNFC.state+"O"+OficinaNFC.state, 4000)
+            argPart1 = "--input P"+PisoNFC.state+"O"+OficinaNFC.state
+        }
+        var String argPart2 = ""
+        if (NFCTagID.state != NULL)
+        {
+            argPart2 = " --uuid "+NFCTagID.state
+        }
+        var String arguments = argPart1 + argPart2
+        if (arguments != "")
+        {   
+            var String results = ""            
+            results = executeCommandLine("python3 /home/openhabian/Elevator-AI/nfc_reader/ver.py "+arguments , 4000)
             logInfo("exec ver.py", "Results are: " + results)
             if (results != "") 
             { 
                 OptionOutputNFC.postUpdate(results)
-                OptionOutputNFC.sendCommand(REFRESH) //Speeds up process a bit
+                OptionOutputNFC.sendCommand(REFRESH) //Speeds up process a bit?
             }
         }
         else
         {
-            OptionOutputNFC.postUpdate("Debes elegir piso y oficina")
+            OptionOutputNFC.postUpdate("Debes elegir piso&oficina o escanear un dispositivo o tarjeta")
         }        
     }
     if (receivedCommand.toString == "1") // Agregar (Add)-----------------------------
