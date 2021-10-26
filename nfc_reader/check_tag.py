@@ -137,6 +137,9 @@ while True:
                     # Reset file pointer
                     f.seek(0)
                     break
+
+        # BLUE light: New Tag has been scanned        
+        threading.Thread(target=led_signal, args=[b]).start()
     except:
         pass
 
