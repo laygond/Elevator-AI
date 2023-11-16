@@ -1,7 +1,7 @@
 // Things
 // Note: types for channels start with lower case in comparison with other files
 
-Bridge mqtt:systemBroker:embedded-mqtt-broker [ host="192.168.0.205", secure=false ]
+Bridge mqtt:systemBroker:embedded-mqtt-broker [ host="192.168.8.190", secure=false ]
 {  
     // Thing <binding_id>:<type_id>:<thing_id> "Label" @ "Location" [ <parameters> ]
 

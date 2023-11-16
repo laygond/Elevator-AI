@@ -59,7 +59,7 @@ g.start(100)
 b.start(100)
 
 # MQTT Setup
-mqttBroker ="192.168.0.205" 
+mqttBroker ="192.168.8.190" 
 client = mqtt.Client("PyMQ")
 client.connect(mqttBroker)
 
@@ -101,7 +101,8 @@ while True:
         tag  = clf.connect(rdwr={'on-connect': lambda tag: False})
         uuid = str(binascii.hexlify(tag.identifier).decode())
 
-        # Send uuid to openhab server for record purposes
+        # Send uuid to openhab server for record purposes 
+        # (this record works for searching, adding, and deleting uuid from floor&offices)  )
         client.reconnect() # in case broker disconnects
         client.publish("elevator/sensor/nfc", uuid)
 
