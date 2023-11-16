@@ -41,18 +41,18 @@ GPIO.setwarnings(False)        # In case  pin is set to output twice
 GPIO_ON  = 0                   # Since my relay is active low
 GPIO_OFF = 1
 RELAY_PIN = {
-'BPB' : 18,               # Relay pins from button PB (lobby) to button 9 (ninth floor)
-'B1'  : 17,               # These are single press ON buttons
-'B2'  : 27,
-'B3'  : 5,
-'B4'  : 5,
-'B5'  : 5,
-'B6'  : 5,
-'B7'  : 5,
-'B8'  : 5,
-'B9'  : 5,
-'BDetener' : 22,          # Relay pins for stopping elevator cabin and alarm
-'BAlarma'  : 23}          # These are ON/OFF switches (double state buttons) 
+'BPB' : 21,               # Relay pins from button PB (lobby) to button 9 (ninth floor)
+'B1'  : 20,               # These are single press ON buttons
+'B2'  : 16,
+'B3'  : 26,
+'B4'  : 19,
+'B5'  : 6,
+'B6'  : 25,
+'B7'  : 24,
+'B8'  : 23,
+'B9'  : 22,
+'BDetener' : 27,          # Relay pins for stopping elevator cabin and alarm
+'BAlarma'  : 17}          # These are ON/OFF switches (double state buttons) 
 GPIO.setup(RELAY_PIN[args['input']], GPIO.OUT)    # Set pin as output     
 GPIO.output(RELAY_PIN[args['input']], GPIO_OFF)   # Start with relay off
 
@@ -116,7 +116,7 @@ if args["input"] == 'B3':
         disable_button_panel() 
         
 if args["input"] == 'B4':
-    if botonera_enabled_through_tag or floor4_permission():
+    if botonera_enabled_through_tag: #or floor4_permission():
         press(RELAY_PIN['B4'])         
         disable_button_panel() 
         
