@@ -1,11 +1,11 @@
 # -----------------------------
 #   USAGE
 # -----------------------------
-# python rgb_control.py.py --rgb 0,100,122
+# python classic_rgb_control.py --rgb 0,100,122
 #
 # DESCRIPTION:
-# This script is used for debugging.
-# Set color of an LED strip through PWM from command line.
+# This script is used for debugging/learning-demo.
+# Set color of an ENTIRE LED strip through PWM from command line.
 #
 # Author: Bryan Laygond
 # Website: http://www.laygond.com
