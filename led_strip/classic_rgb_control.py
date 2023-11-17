@@ -5,7 +5,8 @@
 #
 # DESCRIPTION:
 # This script is used for debugging/learning-demo.
-# Set color of an ENTIRE LED strip through PWM from command line.
+# Set color of an ENTIRE non-addressable LED strip
+# through PWM from command line.
 #
 # Author: Bryan Laygond
 # Website: http://www.laygond.com
